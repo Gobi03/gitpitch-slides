@@ -76,8 +76,7 @@ case class Some[+A](x: A) extends Option[A]
 
 - 一旦定義した型にあとからコンストラクタが追加できたらいいのに
 
-  
-後ほど詳しく話します。 |
+後ほど詳しく話します。
 
 ---
 
@@ -149,7 +148,7 @@ val f : bool -> [> `Blue | `Red ]
 
 ### 疑問
 
-Q: `事前に型宣言・定義をせずに使える`、 こんなことを許して網羅性チェックとか大丈夫？
+Q: 「`事前に型宣言・定義をせずに使える`」<- こんなことを許して網羅性チェックとか大丈夫？
 
 ---
 
@@ -166,7 +165,7 @@ let color_to_signal color =
 
 型
 ```ocaml
-val color_to_com : [< `Blue | `Red ] -> string
+val color_to_signal : [< `Blue | `Red ] -> string
 ```
 
 +++
@@ -184,10 +183,13 @@ let color_to_signal color =
 
 `` `Red`` に適用
 ```ocaml
-color_to_com `Red
+color_to_signal `Red
 ```
 
-`"stop"` が返る
+結果
+```ocaml
+"stop"
+```
 
 +++
 #### 多相バリアントのコンストラクタを使用する例
@@ -203,14 +205,14 @@ let color_to_signal color =
 
 `` `Gold`` に適用
 ```ocaml
-color_to_com `Gold
+color_to_signal `Gold
 ```
 
 結果
 ```ocaml
-Characters 13-18:
-  color_to_com `Gold
-               ^^^^^
+Characters 16-21:
+  color_to_signal `Gold;;
+                  ^^^^^
 Error: This expression has type [> `Gold ]
        but an expression was expected of type [< `Blue | `Red ]
        The second variant type does not allow tag(s) `Gold
@@ -316,7 +318,7 @@ val color_to_com : [< `Blue | `Red ] -> string
 ### 信号機の例
 #### 通常のバリアントの場合
 
-プログラム内で、基本は２色信号を扱うけど、一部で３色信号も使われる場合。  
+プログラム内で、基本は２色信号を扱うけど、一部で３色信号も使われる場合。  
 
 どう書きましょう？
 
@@ -352,7 +354,7 @@ let signal3_to_str color =
   | Yellow -> "should stop"
 ```
 
-### ボイラープレート(´･_･`)
+###### ボイラープレート(´･_･`)
 
 +++
 ### 信号機の例
@@ -409,7 +411,7 @@ let signal3_to_str color =
   | #signal2 as x -> signal2_to_str x
   | `Yellow -> "should stop"
 ```
-@[3](signal2用の関数に処理を投げれる)
+@[3](signal2用の関数に処理を投げられる)
 
 関数の型
 ```ocaml
@@ -498,10 +500,10 @@ Error: This expression has type [> `Nil ]
 
 
 ---
- ### 一方でデメリットも・・
+### 一方でデメリットも・・
 
- - プログラムの型推論・型 の表記が，かなり複雑になる
- - 型推論が気を効かせすぎる（時間の都合で具体例を出せませんでしたが・・）
+- 型の表記がかなり複雑になる
+- 型推論が気を効かせすぎる（時間の都合で具体例を出せませんでしたが・・）
  
 ---
 
@@ -509,5 +511,5 @@ Error: This expression has type [> `Nil ]
 
 - 一つのコンストラクタを複数の型のために使える
 - 通常のバリアントでは書けないような型制約が書ける
-- デメリットも多いので、特別な理由が無ければ普通のバリアントを使おう
-- 他にも面白い例（再帰的なデータ構造の拡張例とか）が出てくるので、[『プログラミング in OCaml』](http://www.fos.kuis.kyoto-u.ac.jp/~igarashi/OCaml/)を読もう！ね！
+- デメリットも多いので、特別な理由が無ければ普通のバリアントを使おう
+- 他にも面白い例（再帰的なデータ構造の拡張例とか）が出てくるので、[『プログラミング in OCaml』](http://www.fos.kuis.kyoto-u.ac.jp/~igarashi/OCaml/)を読もう！ね！
